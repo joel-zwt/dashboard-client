@@ -35,6 +35,7 @@ const EmployeeList = () => {
   useEffect(() => {
     console.log(filter);
     console.log(employeeTableData);
+    setLoading(true);
     if (employeeTableData.page >= 0) {
       if (filter.filterSearch == false) {
         axios({
@@ -44,6 +45,9 @@ const EmployeeList = () => {
         }).then((result) => {
           setEmployees(result.data.employees);
           setTotalEmployees(result.data.count);
+          setTimeout(() => {
+            setLoading(false);
+          }, 300);
           console.log(result);
         });
       } else {
@@ -69,6 +73,9 @@ const EmployeeList = () => {
           console.log(result);
           setEmployees(result.data.employees);
           setTotalEmployees(result.data.count);
+          setTimeout(() => {
+            setLoading(false);
+          }, 300);
           console.log(result);
         });
       }
@@ -76,6 +83,7 @@ const EmployeeList = () => {
   }, [filter, employeeTableData]);
 
   useEffect(() => {
+    setLoading(true);
     console.log(deleteData);
     axios({
       method: "post",
@@ -90,6 +98,9 @@ const EmployeeList = () => {
         ...employeeTableData,
         page: 0,
       });
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
     });
   }, [deleteData]);
 

@@ -23,6 +23,7 @@ import {
   Grid,
   Tooltip,
   IconButton,
+  CircularProgress,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import GetAppIcon from "@material-ui/icons/GetApp";
@@ -49,6 +50,14 @@ const useStyles = makeStyles((theme) => ({
     active: {
       color: theme.palette.white,
     },
+  },
+  loading: {
+    // width: "100&",
+    height: "75px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    // padding: theme.spacing(2),
   },
   content: {
     padding: 0,
@@ -80,6 +89,9 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  hidden: {
+    display: "none",
+  },
 }));
 
 const EmployeesTable = (props) => {
@@ -104,6 +116,7 @@ const EmployeesTable = (props) => {
   const [orderColumn, setOrderColumn] = useState("Name");
   const [orderDirection, setOrderDirection] = useState("asc");
   const [data, setData] = useState([]);
+  const [loader, setLoader] = useState(true);
 
   //this is to store the data from props to the local object
   useEffect(() => {
@@ -113,6 +126,10 @@ const EmployeesTable = (props) => {
       setPage(employeeTableData.page);
     }
   }, [employees, totalEmployees]);
+
+  useEffect(() => {
+    setLoader(loading);
+  }, [loading]);
 
   useEffect(() => {
     // axios({
@@ -294,48 +311,73 @@ const EmployeesTable = (props) => {
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {data
-                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((employee) => (
-                    <TableRow
-                      className={classes.tableRow}
-                      hover
-                      key={employee.v_employeeId}
-                      selected={
-                        selectedEmployees.indexOf(employee.v_employeeId) !== -1
-                      }
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={
-                            selectedEmployees.indexOf(employee.v_employeeId) !==
-                            -1
-                          }
-                          color="primary"
-                          onChange={(event) =>
-                            handleSelectOne(event, employee.v_employeeId)
-                          }
-                          value="true"
-                        />
-                      </TableCell>
 
-                      <TableCell>
-                        <div className={classes.nameContainer}>
-                          <Avatar
-                            className={classes.avatar}
-                            src={employee.v_imgURL}
-                          ></Avatar>
-                          <Typography variant="body1">
-                            {employee.v_name}
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      <TableCell>{employee.v_email}</TableCell>
-                      <TableCell>{employee.e_gender}</TableCell>
-                      <TableCell>{employee.v_department}</TableCell>
-                    </TableRow>
-                  ))}
+              <TableBody>
+                <TableRow
+                  className={clsx(classes.tableRow, !loader && classes.hidden)}
+                >
+                  <TableCell colSpan={tableHead.length + 1}>
+                    <div className={classes.loading}>
+                      <CircularProgress size={40} thickness={5} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+                {data.length == 0 ? (
+                  <TableRow
+                    className={clsx(classes.tableRow, loader && classes.hidden)}
+                  >
+                    <TableCell colSpan={tableHead.length + 1}>
+                      <div className={classes.loading}>
+                        <Typography variant="h3">No results to show</Typography>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  data
+                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((employee) => (
+                      <TableRow
+                        // className={classes.tableRow}
+                        className={clsx(loader && classes.hidden)}
+                        hover
+                        key={employee.v_employeeId}
+                        selected={
+                          selectedEmployees.indexOf(employee.v_employeeId) !==
+                          -1
+                        }
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={
+                              selectedEmployees.indexOf(
+                                employee.v_employeeId
+                              ) !== -1
+                            }
+                            color="primary"
+                            onChange={(event) =>
+                              handleSelectOne(event, employee.v_employeeId)
+                            }
+                            value="true"
+                          />
+                        </TableCell>
+
+                        <TableCell>
+                          <div className={classes.nameContainer}>
+                            <Avatar
+                              className={classes.avatar}
+                              src={employee.v_imgURL}
+                            ></Avatar>
+                            <Typography variant="body1">
+                              {employee.v_name}
+                            </Typography>
+                          </div>
+                        </TableCell>
+                        <TableCell>{employee.v_email}</TableCell>
+                        <TableCell>{employee.e_gender}</TableCell>
+                        <TableCell>{employee.v_department}</TableCell>
+                      </TableRow>
+                    ))
+                )}
               </TableBody>
             </Table>
           </div>
