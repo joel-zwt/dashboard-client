@@ -6,6 +6,7 @@ import MuiTableHead from "./MuiTableHead";
 import MuiTableRow from "./MuiTableRow";
 import MuiTypography from "./MuiTypography";
 import MuiOutlinedInput from "./MuiOutlinedInput";
+import MuiTableSortLabel from "./MuiTableSortLabel";
 
 export default {
   MuiButton,
@@ -16,4 +17,5 @@ export default {
   MuiTableRow,
   MuiTypography,
   MuiOutlinedInput,
+  MuiTableSortLabel,
 };

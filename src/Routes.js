@@ -7,7 +7,7 @@ import { Main as MainLayout, Minimal as MinimalLayout } from "./layouts";
 import {
   Dashboard as DashboardView,
   ProductList as ProductListView,
-  UserList as UserListView,
+  EmployeeList as EmployeeListView,
   Typography as TypographyView,
   Icons as IconsView,
   Account as AccountView,
@@ -18,6 +18,7 @@ import {
   AuthRedirect as AuthRedirectView,
   ForgotPassword as ForgotPasswordView,
   ResetPassword as ResetPasswordView,
+  NewEmployee as NewEmployeeView,
 } from "./views";
 
 const Routes = () => {
@@ -31,10 +32,16 @@ const Routes = () => {
         path="/dashboard"
       />
       <RouteWithLayout
-        component={UserListView}
+        component={EmployeeListView}
         exact
         layout={MainLayout}
-        path="/users"
+        path="/employees"
+      />
+      <RouteWithLayout
+        component={NewEmployeeView}
+        exact
+        layout={MainLayout}
+        path="/employees/new"
       />
       <RouteWithLayout
         component={ProductListView}
