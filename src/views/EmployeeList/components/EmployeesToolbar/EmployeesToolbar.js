@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
-import { withRouter } from "react-router-dom";
+// import { withRouter } from "react-router-dom";
 
 import {
   Button,
@@ -102,8 +102,10 @@ const EmployeesToolbar = (props) => {
     setEmployeeTableData({ ...employeeTableData, page: 0 });
   };
 
+  //withrouter hoc giving context warning hence using window object
   const handleNewUser = () => {
-    props.history.push("/employees/new");
+    // props.history.push("/employees/new");
+    window.location.assign("/employees/new");
   };
 
   return (
@@ -231,4 +233,4 @@ EmployeesToolbar.propTypes = {
   className: PropTypes.string,
 };
 
-export default withRouter(EmployeesToolbar);
+export default EmployeesToolbar;

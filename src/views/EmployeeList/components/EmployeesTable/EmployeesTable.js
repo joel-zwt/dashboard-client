@@ -27,6 +27,8 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import EditIcon from "@material-ui/icons/Edit";
+// import { withRouter } from "react-router-dom";
 
 // import { getInitials } from "../../../../helpers";
 
@@ -108,7 +110,7 @@ const EmployeesTable = (props) => {
   } = props;
 
   const classes = useStyles();
-  const tableHead = ["Name", "Email", "Gender", "Department"];
+  const tableHead = ["Name", "Email", "Gender", "Department", "Actions"];
   const [count, setCount] = useState(10);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -219,6 +221,18 @@ const EmployeesTable = (props) => {
         setOrderDirection("asc");
       }
     };
+  };
+
+  //withrouter hoc giving context warning hence using window
+  const handleEdit = (id) => {
+    // props.history.push("/employees/edit/" + id);
+    window.location.assign("/employees/edit/" + id);
+  };
+
+  const handleSingleDelete = (id) => {
+    var del = [];
+    del.push(id);
+    setDeleteData(del);
   };
 
   const handleDelete = () => {
@@ -375,6 +389,30 @@ const EmployeesTable = (props) => {
                         <TableCell>{employee.v_email}</TableCell>
                         <TableCell>{employee.e_gender}</TableCell>
                         <TableCell>{employee.v_department}</TableCell>
+                        <TableCell>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              color="primary"
+                              size="medium"
+                              disabled={selectedEmployees.length > 0}
+                              onClick={() => handleEdit(employee.v_employeeId)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete">
+                            <IconButton
+                              color="primary"
+                              size="medium"
+                              disabled={selectedEmployees.length > 0}
+                              onClick={() =>
+                                handleSingleDelete(employee.v_employeeId)
+                              }
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
                       </TableRow>
                     ))
                 )}

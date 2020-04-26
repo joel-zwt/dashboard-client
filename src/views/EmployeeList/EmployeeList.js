@@ -31,6 +31,7 @@ const EmployeeList = () => {
   const [totalEmployees, setTotalEmployees] = useState(0);
   const [loading, setLoading] = useState(false);
   const [deleteData, setDeleteData] = useState([]);
+  const [edit, setEdit] = useState("");
 
   useEffect(() => {
     console.log(filter);
@@ -42,14 +43,23 @@ const EmployeeList = () => {
           method: "post",
           url: "/employees/",
           data: { ...employeeTableData },
-        }).then((result) => {
-          setEmployees(result.data.employees);
-          setTotalEmployees(result.data.count);
-          setTimeout(() => {
-            setLoading(false);
-          }, 300);
-          console.log(result);
-        });
+        })
+          .then((result) => {
+            setEmployees(result.data.employees);
+            setTotalEmployees(result.data.count);
+            setTimeout(() => {
+              setLoading(false);
+            }, 300);
+            console.log(result);
+          })
+          .catch((err) => {
+            console.log(err);
+            setEmployees([]);
+            setTotalEmployees(0);
+            setTimeout(() => {
+              setLoading(false);
+            }, 300);
+          });
       } else {
         var filterValues = filter.values;
         axios({
@@ -69,15 +79,24 @@ const EmployeeList = () => {
               e_gender: filterValues.gender ? filterValues.gender : "",
             },
           },
-        }).then((result) => {
-          console.log(result);
-          setEmployees(result.data.employees);
-          setTotalEmployees(result.data.count);
-          setTimeout(() => {
-            setLoading(false);
-          }, 300);
-          console.log(result);
-        });
+        })
+          .then((result) => {
+            console.log(result);
+            setEmployees(result.data.employees);
+            setTotalEmployees(result.data.count);
+            setTimeout(() => {
+              setLoading(false);
+            }, 300);
+            console.log(result);
+          })
+          .catch((err) => {
+            console.log(err);
+            setEmployees([]);
+            setTotalEmployees(0);
+            setTimeout(() => {
+              setLoading(false);
+            }, 300);
+          });
       }
     }
   }, [filter, employeeTableData]);
