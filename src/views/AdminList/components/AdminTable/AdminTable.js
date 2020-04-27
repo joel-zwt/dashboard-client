@@ -28,6 +28,7 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import EditIcon from "@material-ui/icons/Edit";
+import StatusBullet from "../../../../components/StatusBullet";
 // import { withRouter } from "react-router-dom";
 
 // import { getInitials } from "../../../../helpers";
@@ -94,25 +95,28 @@ const useStyles = makeStyles((theme) => ({
   hidden: {
     display: "none",
   },
+  status: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
-const EmployeesTable = (props) => {
+const AdminTable = (props) => {
   var {
     className,
     filter,
-    employees,
-    totalEmployees,
-    setEmployeeTableData,
-    employeeTableData,
+    admin,
+    totalAdmin,
+    setAdminTableData,
+    adminTableData,
     loading,
     setDeleteData,
     ...rest
   } = props;
 
   const classes = useStyles();
-  const tableHead = ["Name", "Email", "Gender", "Department", "Actions"];
+  const tableHead = ["Name", "Email", "Department", "Status", "Actions"];
   const [count, setCount] = useState(10);
-  const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [selectedAdmin, setSelectedAdmin] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [orderColumn, setOrderColumn] = useState("Name");
@@ -122,32 +126,19 @@ const EmployeesTable = (props) => {
 
   //this is to store the data from props to the local object
   useEffect(() => {
-    setData(employees);
-    setCount(totalEmployees);
-    if (employeeTableData.page >= 0) {
-      setPage(employeeTableData.page);
+    setData(admin);
+    setCount(totalAdmin);
+    if (adminTableData.page >= 0) {
+      setPage(adminTableData.page);
     }
-  }, [employees, totalEmployees]);
+  }, [admin, totalAdmin]);
 
   useEffect(() => {
     setLoader(loading);
   }, [loading]);
 
   useEffect(() => {
-    // axios({
-    //   method: "post",
-    //   url: "/employees/",
-    //   data: {
-    //     page: page,
-    //     rowsPerPage: rowsPerPage,
-    //     orderDirection: orderDirection,
-    //     orderColumn: orderColumn.toLowerCase(),
-    //   },
-    // }).then((result) => {
-    //   setData(result.data.employees);
-    //   setCount(result.data.count);
-    // });
-    setEmployeeTableData({
+    setAdminTableData({
       page: page,
       rowsPerPage: rowsPerPage,
       orderDirection: orderDirection,
@@ -156,47 +147,43 @@ const EmployeesTable = (props) => {
   }, [orderColumn, orderDirection, page, rowsPerPage]);
 
   const handleSelectAll = (event) => {
-    let newSelectedEmployees;
+    let newSelectedAdmin;
     console.log(event.target.checked);
     if (event.target.checked) {
-      if (selectedEmployees.length > 0) {
-        newSelectedEmployees = [];
+      if (selectedAdmin.length > 0) {
+        newSelectedAdmin = [];
       } else {
-        newSelectedEmployees = data.map((employee) => employee.v_employeeId);
+        newSelectedAdmin = data.map((admin) => admin.v_adminId);
       }
     } else {
-      newSelectedEmployees = [];
+      newSelectedAdmin = [];
     }
-    setSelectedEmployees(newSelectedEmployees);
-    console.log("selected", newSelectedEmployees);
+    setSelectedAdmin(newSelectedAdmin);
+    console.log("selected", newSelectedAdmin);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedEmployees.indexOf(id);
-    let newSelectedEmployees = [];
+    const selectedIndex = selectedAdmin.indexOf(id);
+    let newSelectedAdmin = [];
 
     //if not selected, then add
     if (selectedIndex === -1) {
-      newSelectedEmployees = newSelectedEmployees.concat(selectedEmployees, id);
+      newSelectedAdmin = newSelectedAdmin.concat(selectedAdmin, id);
     }
     //already selected, then remove
     else if (selectedIndex === 0) {
-      newSelectedEmployees = newSelectedEmployees.concat(
-        selectedEmployees.slice(1)
-      );
-    } else if (selectedIndex === selectedEmployees.length - 1) {
-      newSelectedEmployees = newSelectedEmployees.concat(
-        selectedEmployees.slice(0, -1)
-      );
+      newSelectedAdmin = newSelectedAdmin.concat(selectedAdmin.slice(1));
+    } else if (selectedIndex === selectedAdmin.length - 1) {
+      newSelectedAdmin = newSelectedAdmin.concat(selectedAdmin.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelectedEmployees = newSelectedEmployees.concat(
-        selectedEmployees.slice(0, selectedIndex),
-        selectedEmployees.slice(selectedIndex + 1)
+      newSelectedAdmin = newSelectedAdmin.concat(
+        selectedAdmin.slice(0, selectedIndex),
+        selectedAdmin.slice(selectedIndex + 1)
       );
     }
-    setSelectedEmployees(newSelectedEmployees);
-    console.log(newSelectedEmployees);
-    // console.log(newSelectedEmployees);
+    setSelectedAdmin(newSelectedAdmin);
+    console.log(newSelectedAdmin);
+    // console.log(newSelectedAdmin);
   };
 
   const handlePageChange = (event, page) => {
@@ -225,8 +212,8 @@ const EmployeesTable = (props) => {
 
   //withrouter hoc giving context warning hence using window
   const handleEdit = (id) => {
-    // props.history.push("/employees/edit/" + id);
-    window.location.assign("/employees/edit/" + id);
+    // props.history.push("/admin/edit/" + id);
+    window.location.assign("/admin/edit/" + id);
   };
 
   const handleSingleDelete = (id) => {
@@ -236,9 +223,9 @@ const EmployeesTable = (props) => {
   };
 
   const handleDelete = () => {
-    if (selectedEmployees.length > 0) {
-      setDeleteData(selectedEmployees);
-      setSelectedEmployees([]);
+    if (selectedAdmin.length > 0) {
+      setDeleteData(selectedAdmin);
+      setSelectedAdmin([]);
       // setPage(0);
     }
   };
@@ -249,15 +236,15 @@ const EmployeesTable = (props) => {
         <Toolbar
           disableGutters
           className={clsx(
-            selectedEmployees.length && classes.options,
+            selectedAdmin.length && classes.options,
             classes.infoHead
           )}
         >
-          {selectedEmployees.length > 0 ? (
+          {selectedAdmin.length > 0 ? (
             <Grid container alignItems="center">
               <Grid item xs={8}>
                 <Typography variant="subtitle1" color="inherit">
-                  {selectedEmployees.length} selected on this page
+                  {selectedAdmin.length} selected on this page
                 </Typography>
               </Grid>
               <Grid
@@ -289,7 +276,7 @@ const EmployeesTable = (props) => {
               </Grid>
             </Grid>
           ) : (
-            <Typography variant="h2">Employee List</Typography>
+            <Typography variant="h2">Admin List</Typography>
           )}
         </Toolbar>
         <PerfectScrollbar>
@@ -301,13 +288,12 @@ const EmployeesTable = (props) => {
                     <Checkbox
                       className={classes.headCell}
                       checked={
-                        selectedEmployees.length === data.length &&
-                        data.length != 0
+                        selectedAdmin.length === data.length && data.length != 0
                       }
                       color="default"
                       indeterminate={
-                        selectedEmployees.length > 0 &&
-                        selectedEmployees.length < data.length
+                        selectedAdmin.length > 0 &&
+                        selectedAdmin.length < data.length
                       }
                       onChange={handleSelectAll}
                     />
@@ -358,27 +344,22 @@ const EmployeesTable = (props) => {
                 ) : (
                   data
                     // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((employee) => (
+                    .map((admin) => (
                       <TableRow
                         // className={classes.tableRow}
                         className={clsx(loader && classes.hidden)}
                         hover
-                        key={employee.v_employeeId}
-                        selected={
-                          selectedEmployees.indexOf(employee.v_employeeId) !==
-                          -1
-                        }
+                        key={admin.v_adminId}
+                        selected={selectedAdmin.indexOf(admin.v_adminId) !== -1}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={
-                              selectedEmployees.indexOf(
-                                employee.v_employeeId
-                              ) !== -1
+                              selectedAdmin.indexOf(admin.v_adminId) !== -1
                             }
                             color="primary"
                             onChange={(event) =>
-                              handleSelectOne(event, employee.v_employeeId)
+                              handleSelectOne(event, admin.v_adminId)
                             }
                             value="true"
                           />
@@ -388,23 +369,33 @@ const EmployeesTable = (props) => {
                           <div className={classes.nameContainer}>
                             <Avatar
                               className={classes.avatar}
-                              src={employee.v_imgURL}
+                              src={admin.v_imgURL}
                             ></Avatar>
                             <Typography variant="body1">
-                              {employee.v_name}
+                              {admin.v_name}
                             </Typography>
                           </div>
                         </TableCell>
-                        <TableCell>{employee.v_email}</TableCell>
-                        <TableCell>{employee.e_gender}</TableCell>
-                        <TableCell>{employee.v_department}</TableCell>
+                        <TableCell>{admin.v_email}</TableCell>
+                        <TableCell>{admin.v_department}</TableCell>
+                        <TableCell>
+                          <StatusBullet
+                            className={classes.status}
+                            color={
+                              admin.v_status === "Active" ? "success" : "danger"
+                            }
+                            size="sm"
+                          />
+                          {admin.v_status}
+                        </TableCell>
+
                         <TableCell>
                           <Tooltip title="Edit">
                             <IconButton
                               color="primary"
                               size="medium"
-                              disabled={selectedEmployees.length > 0}
-                              onClick={() => handleEdit(employee.v_employeeId)}
+                              disabled={selectedAdmin.length > 0}
+                              onClick={() => handleEdit(admin.v_adminId)}
                             >
                               <EditIcon />
                             </IconButton>
@@ -413,9 +404,9 @@ const EmployeesTable = (props) => {
                             <IconButton
                               color="primary"
                               size="medium"
-                              disabled={selectedEmployees.length > 0}
+                              disabled={selectedAdmin.length > 0}
                               onClick={() =>
-                                handleSingleDelete(employee.v_employeeId)
+                                handleSingleDelete(admin.v_adminId)
                               }
                             >
                               <DeleteIcon />
@@ -445,8 +436,8 @@ const EmployeesTable = (props) => {
   );
 };
 
-EmployeesTable.propTypes = {
+AdminTable.propTypes = {
   className: PropTypes.string,
 };
 
-export default EmployeesTable;
+export default AdminTable;

@@ -20,6 +20,9 @@ import {
   ResetPassword as ResetPasswordView,
   NewEmployee as NewEmployeeView,
   EditEmployee as EditEmployeeView,
+  AdminList as AdminListView,
+  NewAdmin as NewAdminView,
+  EditAdmin as EditAdminView,
 } from "./views";
 
 const Routes = () => {
@@ -48,6 +51,23 @@ const Routes = () => {
         component={EditEmployeeView}
         layout={MainLayout}
         path="/employees/edit"
+      />
+      <RouteWithLayout
+        component={AdminListView}
+        exact
+        layout={MainLayout}
+        path="/admin"
+      />
+      <RouteWithLayout
+        component={NewAdminView}
+        exact
+        layout={MainLayout}
+        path="/admin/new"
+      />
+      <RouteWithLayout
+        component={EditAdminView}
+        layout={MainLayout}
+        path="/admin/edit"
       />
       <RouteWithLayout
         component={ProductListView}

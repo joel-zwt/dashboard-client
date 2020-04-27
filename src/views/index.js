@@ -13,3 +13,6 @@ export { default as ForgotPassword } from "./ForgotPassword";
 export { default as ResetPassword } from "./ResetPassword";
 export { default as NewEmployee } from "./NewEmployee";
 export { default as EditEmployee } from "./EditEmployee";
+export { default as AdminList } from "./AdminList";
+export { default as EditAdmin } from "./EditAdmin";
+export { default as NewAdmin } from "./NewAdmin";
